@@ -25,10 +25,14 @@ def bestPairs(Apos, Bpos, correlations, threshold):
     return Apos[keeps], Bpos[bestIndcs[keeps]]
 
 def get_PKL(filename):
-    f=open(filename,'rb')
-    PKL=pickle.load(f)
-    f.close()
-    return(PKL)
+    try:
+        f=open(filename,'rb')
+        PKL=pickle.load(f)
+        f.close()
+        return(PKL)
+    except Exception as err:
+        print("Could not open: ", filename)
+        return(None)
 
 
 f1           = sys.argv[1]
@@ -40,7 +44,11 @@ threshold    = np.float64(sys.argv[5])
 f1 = get_PKL(f1)
 f2 = get_PKL(f2)
 
-if len(f1) <= 100 or len(f2) <= 100:
+if f1 == None or f2 == None:
+    print("No spots found for ransac; writing identity matrix")
+    Aff = np.eye(4)[:3]
+
+elif len(f1) <= 100 or len(f2) <= 100:
     print("Insufficient spots detected for ransac; writing identity matrix")
     Aff = np.eye(4)[:3]
 
