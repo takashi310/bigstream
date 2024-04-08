@@ -146,7 +146,7 @@ else:
 min_distance = 6
 overlap = 0.01
 result = prune_blobs(sortedSpots, overlap, min_distance)
-if result != None and result.ndim >= 2:
+if result.size != 0 and result.ndim >= 2:
     pruned_spots = result[:,:-2].astype(np.int)   
     context = scan(im, pruned_spots, radius)
 
