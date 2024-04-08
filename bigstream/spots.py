@@ -145,15 +145,17 @@ else:
 # final prune and save
 min_distance = 6
 overlap = 0.01
-pruned_spots = prune_blobs(sortedSpots, overlap, min_distance)[:,:-2].astype(np.int)
-context = scan(im, pruned_spots, radius)
+result = prune_blobs(sortedSpots, overlap, min_distance)
+if result != None and result.ndim >= 2:
+    pruned_spots = prune_blobs(sortedSpots, overlap, min_distance)[:,:-2].astype(np.int)   
+    context = scan(im, pruned_spots, radius)
 
-# correct offset to remove radius
-if mode != 'coarse':
-    points = [ [(p[0] - (oo - oo_rad))*vox, p[1]] for p in context ]
-else:
-    points = [ [p[0]*vox, p[1]] for p in context]
+    # correct offset to remove radius
+    if mode != 'coarse':
+        points = [ [(p[0] - (oo - oo_rad))*vox, p[1]] for p in context ]
+    else:
+        points = [ [p[0]*vox, p[1]] for p in context]
 
-# write output
-save_PKL(outpath, points)
+    # write output
+    save_PKL(outpath, points)
 
